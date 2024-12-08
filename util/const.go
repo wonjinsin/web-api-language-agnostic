@@ -58,3 +58,11 @@ const (
 	LoginKey contextKey = "login"
 	UUID     contextKey = "uuid"
 )
+
+// CountryCode is for country code
+type CountryCode string
+
+// CountryCodeConst is for country code constant
+const (
+	CountryCodeJP CountryCode = "JP"
+)
