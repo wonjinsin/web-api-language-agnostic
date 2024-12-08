@@ -1,0 +1,16 @@
+version: "3"
+services:
+  mysql:
+    container_name: pikachu_mysql
+    image: mysql:latest
+    environment:
+      MYSQL_ROOT_PASSWORD: mysqlvotmdnjem
+      MYSQL_DATABASE: pikachu
+      MYSQL_USER: pikachu
+      MYSQL_PASSWORD: mysqlvotmdnjem
+    ports:
+      - 33306:3306
+
+networks:
+  default:
+    name: pikachu_network

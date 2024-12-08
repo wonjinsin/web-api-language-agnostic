@@ -1,0 +1,19 @@
+projectName: pikachu
+domain: http://localhost:33333
+env: local
+
+database:
+  dialect: mysql
+  host: 127.0.0.1
+  port: 33306
+  dbname: pikachu
+  username: pikachu
+  password: mysqlvotmdnjem
+
+readOnlyDatabase:
+  dialect: mysql
+  host: 127.0.0.1
+  port: 33306
+  dbname: pikachu
+  username: pikachu
+  password: mysqlvotmdnjem
