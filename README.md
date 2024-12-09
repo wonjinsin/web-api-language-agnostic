@@ -103,4 +103,11 @@ https://github.com/upsidr/coding-test/blob/main/web-api-language-agnostic/README
 
 2. Get access token with /auths/signin api, mock user is already created
 
-3. Put access token to Bearer token, and call other apis
+3. Put access token to Bearer token, and call other apis(need create with post api/invoices first to get invoices)
+
+## todo
+
+- todo. add test code for service logic, e2e
+- todo. consider library gorm to sqlc because of reflect performance problem
+- todo. refactoring code with writing test code
+- todo. consider about in-memory or caching for perfomance
