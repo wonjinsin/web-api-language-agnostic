@@ -30,6 +30,49 @@ paths:
                       resultData:
                         $ref: "#/components/schemas/Token"
         default:
+          description: Error
+          $ref: "#/components/responses/Response"
+  /invoices:
+    get:
+      summary: Get invoices
+      description: Get invoices
+      responses:
+        "200":
+          description: Invoices
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/InvoiceAggregate"
+        default:
+          description: Error
+          $ref: "#/components/responses/Response"
+    post:
+      summary: Create invoice
+      description: Create invoice
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/NewInvoice"
+      responses:
+        "200":
+          description: Custom object created successfully
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: "#/components/schemas/Response"
+                  - type: object
+                    properties:
+                      resultMsg:
+                        type: string
+                        description: Result message
+                        example: "NewInvoice OK"
+        default:
+          description: Error
           $ref: "#/components/responses/Response"
 components:
   securitySchemes:
@@ -39,7 +82,7 @@ components:
       bearerFormat: JWT 
   responses:
     Response:
-      description: Standard API response
+      description: Standard API response, error also included
       content:
         application/json:
           schema:
@@ -80,3 +123,146 @@ components:
           type: string
           description: Password of the user
           example: "test123"
+    InvoiceAggregate:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint64
+          description: Invoice ID
+          example: 1
+        applicantID:
+          type: string
+          description: ID of the applicant
+          example: "123e4567-e89b-12d3-a456-426614174000"
+        applicantCompanyID:
+          type: integer
+          format: uint64
+          description: ID of the applicant company
+          example: 1
+        recipientCompanyID:
+          type: integer
+          format: uint64
+          description: ID of the recipient company
+          example: 1
+        state:
+          type: string
+          description: State of the invoice
+          enum: [None, Pending, Progress, Paid, Error]
+          example: "Pending"
+        paymentAmount:
+          type: integer
+          format: int64
+          description: Payment amount
+          example: 10000
+        feeWithTaxAmount:
+          type: integer
+          format: int64
+          description: Fee amount including tax
+          example: 440
+        totalAmount:
+          type: integer
+          format: int64
+          description: Total amount including payment and fees
+          example: 10440
+        dueDate:
+          type: string
+          format: date-time
+          description: Due date of the invoice
+          example: "2024-01-01T00:00:00Z"
+        fee:
+          $ref: "#/components/schemas/InvoiceFee"
+        bankAccount:
+          $ref: "#/components/schemas/InvoiceBankAccount"
+    InvoiceFee:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint64
+          description: Fee ID
+          example: 1
+        invoiceID:
+          type: integer
+          format: uint64
+          description: Associated invoice ID
+          example: 1
+        countryCode:
+          type: string
+          description: Country code
+          example: "JP"
+        feeRate:
+          type: integer
+          format: int64
+          description: Fee rate
+          example: 10
+        taxRate:
+          type: integer
+          format: int64
+          description: Tax rate
+          example: 8
+        feeScale:
+          type: integer
+          description: Fee scale
+          example: 100
+        taxScale:
+          type: integer
+          description: Tax scale
+          example: 100
+    InvoiceBankAccount:
+      type: object
+      properties:
+        id:
+          type: integer
+          format: uint64
+          description: Bank account ID
+          example: 1
+        invoiceID:
+          type: integer
+          format: uint64
+          description: Associated invoice ID
+          example: 1
+        companyID:
+          type: integer
+          format: uint64
+          description: Company ID
+          example: 1
+        bankName:
+          type: string
+          description: Name of the bank
+          example: "Bank of Japan"
+        branchName:
+          type: string
+          description: Name of the bank branch
+          example: "Tokyo Branch"
+        accountNo:
+          type: string
+          description: Account number
+          example: "1234567890"
+        accountName:
+          type: string
+          description: Name on the account
+          example: "John Doe"
+    NewInvoice:
+      type: object
+      properties:
+        applicantCompanyID:
+          type: integer
+          format: uint64
+          description: ID of the applicant company
+          example: 1
+        recipientCompanyID:
+          type: integer
+          format: uint64
+          description: ID of the recipient company
+          example: 2
+        amount:
+          type: integer
+          format: int64
+          description: Amount of the invoice
+          example: 10000
+        dueDate:
+          type: string
+          format: date-time
+          description: Due date of the invoice
+          example: "2024-01-01T00:00:00Z"
