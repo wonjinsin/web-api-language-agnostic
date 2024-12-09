@@ -15,8 +15,8 @@ import (
 )
 
 var authNotRequired = map[string]bool{
-	"/api/v1/auth/signup": true,
-	"/api/v1/auth/signin": true,
+	"/api/auths/signup": true,
+	"/api/auths/signin": true,
 }
 
 // AuthMiddleware ...

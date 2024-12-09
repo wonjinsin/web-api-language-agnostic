@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"pikachu/util"
 	"time"
 )
@@ -69,6 +70,27 @@ var invoiceStateMap = map[string]int{
 	"progress": int(InvoiceStateProgress),
 	"paid":     int(InvoiceStatePaid),
 	"error":    int(InvoiceStateError),
+}
+
+// InvoiceStateStrings ...
+func InvoiceStateStrings() []string {
+	return invoiceStateStr
+}
+
+// String ...
+func (is InvoiceState) String() string {
+	return toStr(invoiceStateStr, int(is))
+}
+
+// MarshalJSON ...
+func (is *InvoiceState) MarshalJSON() (data []byte, err error) {
+	return json.Marshal(is.String())
+}
+
+// UnmarshalJSON ...
+func (is *InvoiceState) UnmarshalJSON(data []byte) (err error) {
+	*is = InvoiceState(unmarshalJSON(data, invoiceStateMap, int(InvoiceStateNone)))
+	return nil
 }
 
 // Invoice is model for invoice

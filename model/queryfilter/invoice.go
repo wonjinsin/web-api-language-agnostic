@@ -26,15 +26,15 @@ func (f InvoiceQueryFilter) MakeQuery(ctx context.Context, scope interface{}) (i
 }
 
 // makeGormQuery ...
-func (f InvoiceQueryFilter) makeGormQuery(ctx context.Context, scope *gorm.DB) *gorm.DB {
+func (f InvoiceQueryFilter) makeGormQuery(_ context.Context, scope *gorm.DB) *gorm.DB {
 	if f.DateFrom != nil {
-		scope.Where("created_at >= ?", f.DateFrom)
+		scope = scope.Where("due_date >= ?", f.DateFrom)
 	}
 	if f.DateTo != nil {
-		scope.Where("created_at <= ?", f.DateTo)
+		scope = scope.Where("due_date <= ?", f.DateTo)
 	}
 	if f.CompanyID != nil {
-		scope.Where("company_id = ?", f.CompanyID)
+		scope = scope.Where("applicant_company_id = ?", f.CompanyID)
 	}
 	return scope
 }
