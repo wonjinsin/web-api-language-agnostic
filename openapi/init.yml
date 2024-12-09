@@ -4,10 +4,10 @@ info:
   version: "1.0.0"
   description: Pikachu API
 servers:
-  - url: http://localhost:33333/api/v1
+  - url: http://localhost:33333/api
     description: Local server
 paths:
-  /auth/signin:
+  /auths/signin:
     post:
       summary: Signin
       description: Signin, return access token, put it in Authorization header

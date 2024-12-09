@@ -9,3 +9,8 @@ type Company struct {
 	PostNumber string `json:"postNumber"`
 	Address    string `json:"address"`
 }
+
+// SameID ...
+func (c *Company) SameID(id uint64) bool {
+	return c.ID == id
+}

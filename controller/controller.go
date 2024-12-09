@@ -57,3 +57,9 @@ type AuthController interface {
 	Signup(c echo.Context) (err error)
 	Signin(c echo.Context) (err error)
 }
+
+// InvoiceController ...
+type InvoiceController interface {
+	NewInvoice(c echo.Context) (err error)
+	GetInvoices(c echo.Context) (err error)
+}

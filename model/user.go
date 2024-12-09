@@ -7,16 +7,18 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/crypto/bcrypt"
 	"gorm.io/gorm"
+	"gorm.io/plugin/soft_delete"
 )
 
 // User is model for user
 type User struct {
-	UID       string    `json:"uid" gorm:"primaryKey"`
-	Email     string    `json:"email"`
-	Password  Password  `json:"password,omitempty"`
-	Name      *string   `json:"name,omitempty"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	UID       string                `json:"uid" gorm:"primaryKey"`
+	Email     string                `json:"email"`
+	Password  Password              `json:"password,omitempty"`
+	Name      *string               `json:"name,omitempty"`
+	CreatedAt time.Time             `json:"createdAt" gorm:"<-:create;autoCreateTime;not null"`
+	UpdatedAt time.Time             `json:"updatedAt" gorm:"autoUpdateTime;not null"`
+	DeletedAt soft_delete.DeletedAt `json:"deletedAt" gorm:"default:0"`
 }
 
 // NewUserBySignup is for new user by signup

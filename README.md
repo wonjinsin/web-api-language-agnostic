@@ -101,6 +101,6 @@ https://github.com/upsidr/coding-test/blob/main/web-api-language-agnostic/README
 
 1. Set initial datas at [Getting Started](#getting-started)
 
-2. Get access token with /auth/signin api, mock user is already created
+2. Get access token with /auths/signin api, mock user is already created
 
 3. Put access token to Bearer token, and call other apis

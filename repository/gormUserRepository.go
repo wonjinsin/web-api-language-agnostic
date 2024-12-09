@@ -65,29 +65,3 @@ func (g *gormUserRepository) GetUserByEmail(ctx context.Context, email string) (
 
 	return ruser, nil
 }
-
-// UpdateUser ...
-func (g *gormUserRepository) UpdateUser(ctx context.Context, user *model.User) (ruser *model.User, err error) {
-	zlog.With(ctx).Infow("[New Repository Service]", "user", user)
-
-	scope := g.conn.WithContext(ctx)
-	if err = scope.Updates(user).Error; err != nil {
-		zlog.With(ctx).Errorw("UpdateUser Error", "user", user, "err", err)
-		return nil, err
-	}
-
-	return user, nil
-}
-
-// DeleteUser ...
-func (g *gormUserRepository) DeleteUser(ctx context.Context, uid string) (err error) {
-	zlog.With(ctx).Infow("[New Repository Request]", "uid", uid)
-
-	scope := g.conn.WithContext(ctx)
-	if err = scope.Where("uid = ?", uid).Delete(&model.User{}).Error; err != nil {
-		zlog.With(ctx).Errorw("DeleteUser Error", "uid", uid, "err", err)
-		return err
-	}
-
-	return nil
-}

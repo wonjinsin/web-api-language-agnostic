@@ -1,7 +1,6 @@
 projectName: pikachu
 domain: http://localhost:33333
 env: local
-countryCode: JP
 
 database:
   dialect: mysql

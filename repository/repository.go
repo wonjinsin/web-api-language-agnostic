@@ -9,6 +9,7 @@ import (
 
 	"pikachu/config"
 	"pikachu/model"
+	"pikachu/model/queryfilter"
 	"pikachu/util"
 
 	"gorm.io/driver/mysql"
@@ -59,8 +60,12 @@ func init() {
 
 // Repository ...
 type Repository struct {
-	User         UserRepository
-	UserReadOnly UserReadOnlyRepository
+	User                UserRepository
+	Invoice             InvoiceRepository
+	CompanyReadOnly     CompanyReadOnlyRepository
+	InvoiceReadOnly     InvoiceReadOnlyRepository
+	FeeReadOnly         FeeReadOnlyRepository
+	BankAccountReadOnly BankAccountReadOnlyRepository
 }
 
 // Init ...
@@ -81,11 +86,19 @@ func Init(pikachu *config.ViperConfig) (*Repository, error) {
 	}
 
 	userRepo := NewGormUserRepository(db.MainDB)
-	userReadOnlyRepo := NewGormUserReadOnlyRepository(db.ReadDB)
+	invoiceRepo := NewGormInvoiceRepository(db.MainDB)
+	companyReadRepo := NewGormCompanyReadOnlyRepository(db.ReadDB)
+	invoiceReadRepo := NewGormInvoiceReadOnlyRepository(db.ReadDB)
+	feeReadRepo := NewGormFeeReadOnlyRepository(db.ReadDB)
+	bankAccountReadRepo := NewGormBankAccountReadOnlyRepository(db.ReadDB)
 
 	return &Repository{
-		User:         userRepo,
-		UserReadOnly: userReadOnlyRepo,
+		User:                userRepo,
+		Invoice:             invoiceRepo,
+		CompanyReadOnly:     companyReadRepo,
+		InvoiceReadOnly:     invoiceReadRepo,
+		FeeReadOnly:         feeReadRepo,
+		BankAccountReadOnly: bankAccountReadRepo,
 	}, nil
 }
 
@@ -108,10 +121,8 @@ func getDialector(pikachu *config.ViperConfig, prefix string) gorm.Dialector {
 func getConfig() (gConfig *gorm.Config) {
 	dbLogger := &dbLogger{zlog}
 	gConfig = &gorm.Config{
-		Logger:                                   dbLogger,
-		PrepareStmt:                              true,
-		SkipDefaultTransaction:                   true,
-		DisableForeignKeyConstraintWhenMigrating: true,
+		Logger:      dbLogger,
+		PrepareStmt: true,
 	}
 
 	return gConfig
@@ -122,14 +133,32 @@ type UserRepository interface {
 	NewUser(ctx context.Context, user *model.User) (ruser *model.User, err error)
 	GetUser(ctx context.Context, uid string) (ruser *model.User, err error)
 	GetUserByEmail(ctx context.Context, email string) (ruser *model.User, err error)
-	UpdateUser(ctx context.Context, user *model.User) (ruser *model.User, err error)
-	DeleteUser(ctx context.Context, uid string) (err error)
 }
 
-// UserReadOnlyRepository ...
-type UserReadOnlyRepository interface {
-	GetUser(ctx context.Context, uid string) (ruser *model.User, err error)
-	GetUserByEmail(ctx context.Context, email string) (ruser *model.User, err error)
+// CompanyReadOnlyRepository ...
+type CompanyReadOnlyRepository interface {
+	GetCompanyByUserID(ctx context.Context, uid string) (rcompany *model.Company, err error)
+	GetCompany(ctx context.Context, id uint64) (rcompany *model.Company, err error)
+}
+
+// InvoiceRepository ...
+type InvoiceRepository interface {
+	NewInvoice(ctx context.Context, invoice *model.InvoiceAggregate) (rinvoice *model.InvoiceAggregate, err error)
+}
+
+// InvoiceReadOnlyRepository ...
+type InvoiceReadOnlyRepository interface {
+	GetInvoices(ctx context.Context, filter queryfilter.QueryFilter) (invoices model.InvoiceAggreates, err error)
+}
+
+// FeeReadOnlyRepository ...
+type FeeReadOnlyRepository interface {
+	GetFeeByCountryCode(ctx context.Context, CountryCode util.CountryCode) (rfee *model.Fee, err error)
+}
+
+// BankAccountReadOnlyRepository ...
+type BankAccountReadOnlyRepository interface {
+	GetBankAccountByCompanyID(ctx context.Context, companyID uint64) (rbankAccount *model.BankAccount, err error)
 }
 
 // TxRepository ...

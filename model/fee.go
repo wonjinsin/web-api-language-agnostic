@@ -12,12 +12,7 @@ type Fee struct {
 	TaxScale    int              `json:"taxScale"`
 }
 
-// CalculateFeeAmount is for calculate fee amount
-func (f Fee) CalculateFeeAmount(amount int64) int64 {
-	return (amount * f.FeeRate) / util.Pow10(f.FeeScale)
-}
-
-// CalculateTaxAmount is for calculate tax amount
-func (f Fee) CalculateTaxAmount(amount int64) int64 {
-	return (amount * f.TaxRate) / util.Pow10(f.TaxScale)
+// CalculateFeeWithTaxAmount is for calculate fee amount
+func (f Fee) CalculateFeeWithTaxAmount(amount int64) int64 {
+	return amount * f.FeeRate * f.TaxRate / util.Pow10(f.FeeScale) / util.Pow10(f.TaxScale)
 }

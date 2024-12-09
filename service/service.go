@@ -5,6 +5,8 @@ import (
 	"log"
 	"os"
 	"pikachu/config"
+	"pikachu/model/dao"
+	"pikachu/model/queryfilter"
 	"pikachu/repository"
 	"pikachu/util"
 
@@ -24,17 +26,20 @@ func init() {
 
 // Service ...
 type Service struct {
-	User UserService
-	Auth AuthService
+	User    UserService
+	Auth    AuthService
+	Invoice InvoiceService
 }
 
 // Init ...
 func Init(conf *config.ViperConfig, repo *repository.Repository) (*Service, error) {
 	userSvc := NewUserService(repo.User)
 	authSvc := NewAuthService(conf, repo.User)
+	invoiceSvc := NewInvoiceService(repo.Invoice, repo.CompanyReadOnly, repo.InvoiceReadOnly, repo.FeeReadOnly, repo.BankAccountReadOnly)
 	return &Service{
-		User: userSvc,
-		Auth: authSvc,
+		User:    userSvc,
+		Auth:    authSvc,
+		Invoice: invoiceSvc,
 	}, nil
 }
 
@@ -47,4 +52,10 @@ type UserService interface {
 type AuthService interface {
 	Signup(ctx context.Context, signup *model.Signup) (token *model.Token, err error)
 	Signin(ctx context.Context, signin *model.Signin) (token *model.Token, err error)
+}
+
+// InvoiceService ...
+type InvoiceService interface {
+	NewInvoice(ctx context.Context, uid string, newInvoice *dao.NewInvoice) (err error)
+	GetInvoices(ctx context.Context, uid string, filter *queryfilter.InvoiceQueryFilter) (invoices model.InvoiceAggreates, err error)
 }
