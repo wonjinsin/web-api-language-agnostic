@@ -11,6 +11,6 @@ type Company struct {
 }
 
 // SameID ...
-func (c *Company) SameID(id uint64) bool {
+func (c Company) SameID(id uint64) bool {
 	return c.ID == id
 }

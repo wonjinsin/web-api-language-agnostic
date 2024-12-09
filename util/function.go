@@ -8,3 +8,8 @@ func Pow10(n int) int64 {
 	}
 	return result
 }
+
+// Ptr is generate pointer
+func Ptr[T any](v T) *T {
+	return &v
+}
