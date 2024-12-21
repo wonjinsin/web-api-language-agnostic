@@ -34,7 +34,7 @@ $ make all && make build && make start
 ### Migration initial data
 
 ```
-$ make migrate up ENV=local
+$ make migrate-up ENV=local
 ```
 
 If you have error when Init Please use below command and do Inital action again
@@ -49,14 +49,14 @@ make clean
 
 ```
 # e.g make migrate up ENV=local
-$ make migrate up ENV=${ENV}
+$ make migrate-up ENV=${ENV}
 ```
 
 ### migrate down
 
 ```
 # e.g make migrate down ENV=local
-$ make migrate down ENV=${ENV}
+$ make migrate-down ENV=${ENV}
 ```
 
 ### Build vendors

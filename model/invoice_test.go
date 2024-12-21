@@ -84,20 +84,20 @@ func TestInvoiceState_String(t *testing.T) {
 
 func TestInvoice_CalculateFee(t *testing.T) {
 	invoice := &Invoice{
-		PaymentAmount: 100000,
+		PaymentAmount: 10000,
 	}
 
 	fee := &Fee{
 		CountryCode: util.CountryCodeJP,
-		FeeRate:     1000,
-		TaxRate:     1000,
-		FeeScale:    2,
+		FeeRate:     400,
+		TaxRate:     110,
+		FeeScale:    4,
 		TaxScale:    2,
 	}
 
 	invoice.CalculateFee(fee)
 
-	expectedFeeWithTax := int64(11000)
+	expectedFeeWithTax := int64(440)
 	expectedTotal := invoice.PaymentAmount + expectedFeeWithTax
 
 	assert.Equal(t, expectedFeeWithTax, invoice.FeeWithTaxAmount)
